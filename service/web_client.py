@@ -4,21 +4,14 @@ import requests
 class WebClient:
     """Main web requests client"""
 
-    def __init__(self, url):
+    def __init__(self, url: str):
         self.url = url
 
-    def get_page(self):
+    def get_page(self) -> str:
         response = self._request('get')
         page = response.text
         return page
 
-    def _request(self, method):
+    def _request(self, method: str) -> requests.Response:
         response = requests.request(method, self.url)
         return response
-
-
-if __name__ == '__main__':
-    url = 'https://bank.gov.ua/ua/markets/exchangerates?date=14.10.2021&period=daily'
-    client = WebClient(url)
-    page = client.get_page()
-    print(page)
