@@ -1,5 +1,7 @@
 from bs4 import BeautifulSoup
 
+from service.errors import PriceParserErrors
+
 
 class PriceParser:
     """Nac Bank currency price parser"""
@@ -10,8 +12,11 @@ class PriceParser:
 
     def get_currency_price(self, currency_code: str) -> str:
         """Returns price of currency by currency_code (for example USD)"""
-        amount, price = self._parse_currency_data(currency_code)
-        return self._correct_price(amount, price)
+        try:
+            amount, price = self._parse_currency_data(currency_code)
+            return self._correct_price(amount, price)
+        except AttributeError as error:
+            raise PriceParserErrors(f'Failed to parse page content.\n{error}')
 
     def _parse_currency_data(self, currency_code: str) -> tuple[str, ...]:
         """Extracts amount and amount's price for currency
@@ -48,6 +53,9 @@ class PriceParser:
     @staticmethod
     def _correct_price(amount: str, price: str) -> str:
         """Returns price for one unit in case if parsed amount not 1"""
-        if amount != 1:
-            price = float(price.replace(',', '.')) / int(amount)
-        return str(price)
+        try:
+            if amount != 1:
+                price = float(price.replace(',', '.')) / int(amount)
+            return str(price)
+        except ValueError as error:
+            raise PriceParserErrors(f'Incorrect price format.\n{error}')

@@ -70,7 +70,6 @@ class BankSchema(Schema):
         return Bank(**data)
 
 
-
 if __name__ == '__main__':
     day_price1 = DayPrice(date=datetime.date(202, 10, 23),  price=1.345)
     day_price2 = DayPrice(date=datetime.date(202, 10, 24),  price=1.535)
