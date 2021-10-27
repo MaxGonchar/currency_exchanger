@@ -4,7 +4,7 @@ import pytest
 import requests
 
 from service.web_client import WebClient
-from service.errors import CurrencyExchangerErrors, WebClientError
+from service.errors import WebClientError
 
 
 @patch('requests.request')
@@ -23,10 +23,12 @@ def test_get_page_success(mock_request):
 
 
 @patch('requests.request')
-def test_request_exception(mock_request):
-    mock_request.side_effect = requests.exceptions.HTTPError
+def test_request_http_error(mock_request):
+    mock_request.side_effect = requests.exceptions.HTTPError('Some HTTP Error')
     url = "https://example.com/page"
     client = WebClient(url)
-    with pytest.raises(WebClientError) as e:
+    with pytest.raises(WebClientError) as error:
         client.get_page()
+    assert str(error.value.message) == 'Some HTTP Error'
+    assert error.value.reason == 'WebClient error'
 

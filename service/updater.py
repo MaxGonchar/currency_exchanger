@@ -15,8 +15,8 @@ def update_currency_prices():
 
 
 if __name__ == '__main__':
-    # update_currency_prices()
-    try:
-        update_currency_prices()
-    except CurrencyExchangerErrors as error:
-        error.logg()
+    update_currency_prices()
+    # try:
+    #     update_currency_prices()
+    # except CurrencyExchangerErrors as error:
+    #     error.logg()
