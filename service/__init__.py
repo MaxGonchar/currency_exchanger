@@ -1,5 +1,6 @@
+# ToDo: db tests
+# ToDo: git actions
+# ToDo: main logic
 # ToDo: Logging
-# ToDo: Error handling
-# --- ToDo: db errors
-# --- ToDo: web client errors
-# --- ToDo: parser errors
+# ToDo: Linux autorun
+# ToDo: auto update ???

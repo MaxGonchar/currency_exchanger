@@ -1,19 +1,52 @@
 import os
 
+from service.errors import DBErrors
 
+
+def os_errors_catcher(method):
+    def wrapper(*args, **kwargs):
+        try:
+            return method(*args, **kwargs)
+        except OSError as error:
+            raise DBErrors(error)
+    return wrapper
+
+
+def decorate_cls_methods(decorator):
+    """Decorate attributes of class which are callable by 'decorator'"""
+    def class_wrapper(cls):
+        for attr in cls.__dict__:
+
+            if callable(getattr(cls, attr)):
+                setattr(cls, attr, decorator(getattr(cls, attr)))
+
+        return cls
+
+    return class_wrapper
+
+
+@decorate_cls_methods(os_errors_catcher)
 class DB:
+    """DB is a folder with files, where each file should be a model instance"""
 
-    def __init__(self, db_name, path=None, db_file_extension='json'):
+    def __init__(
+            self, db_name: str,  # db folder name
+            path: str = None,  # path to db, default - app folder
+            db_file_extension: str = 'json'
+    ):
         self.path = path or os.getcwd()
         self.db_name = db_name
         self.db_file_extension = db_file_extension
 
     def init_db(self):
+        """Create folder for db files"""
         db_path = self._get_db_path()
         if not os.path.isdir(db_path):
             os.mkdir(db_path)
 
     def get_all_db_files(self):
+        """return list of file names
+        with extension == self.db_file_extension"""
         all_files = os.listdir(self._get_db_path())
         db_files = filter(self._is_db_file, all_files)
         return list(db_files)
@@ -57,7 +90,7 @@ if __name__ == '__main__':
     # db.init_db()
 
     # ----- TEST get_all_files -----
-    # print(db.get_all_db_files())
+    print(db.get_all_db_files())
 
     # ----- TEST get_file_content -----
     # print(db.get_file_content('1'))
@@ -76,6 +109,4 @@ if __name__ == '__main__':
     # ----- TEST delete_file -----
     # file_name = 'new_file'
     # db.delete_file(file_name)
-
-
-
+q= FileExistsError
