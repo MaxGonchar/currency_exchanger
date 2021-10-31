@@ -44,19 +44,19 @@ class DB:
         if not os.path.isdir(db_path):
             os.mkdir(db_path)
 
-    def get_all_db_files(self):
+    def get_all_db_files(self) -> list[str]:
         """return list of file names
         with extension == self.db_file_extension"""
         all_files = os.listdir(self._get_db_path())
         db_files = filter(self._is_db_file, all_files)
         return list(db_files)
 
-    def get_file_content(self, file_name):
+    def get_file_content(self, file_name: str) -> str:
         with open(self._det_file_path(file_name), 'r') as file:
             content = file.read()
         return content
 
-    def create_file(self, file_name, content):
+    def create_file(self, file_name: str, content: str):
         with open(self._det_file_path(file_name), 'w') as file:
             file.write(content)
 
