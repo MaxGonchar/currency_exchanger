@@ -27,8 +27,10 @@ def test_request_http_error(mock_request):
     mock_request.side_effect = requests.exceptions.HTTPError('Some HTTP Error')
     url = "https://example.com/page"
     client = WebClient(url)
+
     with pytest.raises(WebClientError) as error:
         client.get_page()
+
     assert str(error.value.message) == 'Some HTTP Error'
     assert error.value.reason == 'WebClient error'
 
