@@ -23,3 +23,10 @@ class PriceParserErrors(CurrencyExchangerErrors):
     def __init__(self, message):
         self.reason = 'PriceParser error'
         super().__init__(self.reason, message)
+
+
+class DBErrors(CurrencyExchangerErrors):
+
+    def __init__(self, message):
+        self.reason = 'Data Base error'
+        super().__init__(self.reason, message)
